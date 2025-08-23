@@ -1,7 +1,7 @@
 
 # LLM4IA
 Index Advising via Large Language Models
-![Framework overview of LLM4IA](./LLM4IA.pdf)
+![Framework overview of LLM4IA](./LLM4IA.png)
 
 ### Code structure
 ├── config.json　　　　　　　　　　　　　　　　　　 # Experimental Configuration File  
