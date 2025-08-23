@@ -16,7 +16,7 @@ Index Advising via Large Language Models
 ├── LLM4IA.py　　　　　　　　　　　　　　　　　　　  # LLM4IA Model File  
 ├── data_process.py　　　　　　　　　　　　　　　　 # Process data                 
 ├── planTree.py　　　　　　　　　　　　　　　　　　 # Plan Encoding    
-├── PostgreSQL.py　　　　　　　　　　　　          # Interact with psql 
+├── PostgreSQL.py　　　　　　　　　　　　          # Interact with psql    
 ├── selection/　　　　　　　　　　　　　　　　　　　 # other IAs　      
 ├── hypopg/　　　　　　　　　　　　　　　　　　　　  #     
 ├── tpch-kit/　　　　　　　　　　　　　　　　			    # tpc-h benchmark file  
