@@ -26,5 +26,6 @@ Index Advising via Large Language Models
 ### Example workflow
 
 ```
+pip install -r requirements.txt         # Install requirements with pip
 python LLM4IA_compare.py					        # Run a experiment
 ```
