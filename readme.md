@@ -6,7 +6,7 @@ Index Advising via Large Language Models
 ### Code structure
 ├── config_compare.json　　　　　　　　　　　　　　　# Experimental Configuration File  
 ├── config_db.json　　　　　　　　　　　　　　　　　 # DB Configuration File  
-├── config_LLM.json　　　　　　　　　　　　　　　　　# LLM Configuration File  
+├── config_LLM.json　　　　　　　　　　　　　　　　　# LLM Configuration File, updata api-key here  
 ├── config_extend.json　　　　　　　　　　　　　　　# Extend Configuration File  
 ├── config_db2.json　　　　　　　　　　　　　　　　 # DB2 Configuration File  
 ├── config_relaxtion.json　　　　　　　　　　　　　# Relaxtion Configuration File  
