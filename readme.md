@@ -10,6 +10,7 @@ Index Advising via Large Language Models
 ├── config_extend.json　　　　　　　　　　　　　　　# Extend Configuration File  
 ├── config_db2.json　　　　　　　　　　　　　　　　 # DB2 Configuration File  
 ├── config_relaxtion.json　　　　　　　　　　　　　# Relaxtion Configuration File  
+├── result_compare　　　　　　　　　　　　　　　　  # result file  
 ├── README.md　　　　　　　　　　　　　　　　　　   # Code Documentation  
 ├── requirements.txt　　　　　　　　　　　　　　　  # Experimental Requirements File  
 ├── LLM4IA_compare.py　　　　　　　　　　　　　　　# Compare Process File  
