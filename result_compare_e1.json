@@ -1,0 +1,92 @@
+{
+    "compare IA": {
+        "name": "Extend",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 450
+        },
+        "Output Index Set": "customer(c_custkey); orders(o_orderkey); partsupp(ps_suppkey); lineitem(l_partkey, l_shipmode)",
+        "Cost Reduction": {
+            "no index": 2770249019.19,
+            "with indexes": 1384107925.44,
+            "cost reduction ratio": 50.03669649002519
+        },
+        "Inference Time": 8.458966493606567,
+        "Index Analysis": {
+            "storage": {
+                "customer(c_custkey)": 3.734375,
+                "orders(o_orderkey)": 37.3984375,
+                "partsupp(ps_suppkey)": 19.9296875,
+                "lineitem(l_partkey, l_shipmode)": 291.6015625
+            },
+            "reward": {
+                "lineitem(l_partkey, l_shipmode)": 38.149534755868665,
+                "orders(o_orderkey)": 11.766184853494003,
+                "partsupp(ps_suppkey)": 6.742852513476098,
+                "customer(c_custkey)": 1.3525030923377195,
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                1832711385.96,
+                250432334.22000003,
+                238075726.41,
+                186488016.67999998,
+                262541555.92000002
+            ],
+            "with indexes": [
+                877878160.77,
+                63638528.6,
+                238075726.41,
+                186488016.67999998,
+                18027492.98
+            ]
+        }
+    },
+    "LLM4IA": {
+        "name": "LLM4IA",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 450
+        },
+        "Output Index Set": "customer(c_custkey); partsupp(ps_suppkey); orders(o_orderkey); lineitem(l_partkey); lineitem(l_shipdate)",
+        "Cost Reduction": {
+            "no index": 2770249019.19,
+            "with indexes": 1118275780.4799998,
+            "cost reduction ratio": 59.63266216381605
+        },
+        "Inference Time": 106.6088433265686,
+        "Index Analysis": {
+            "storage": {
+                "customer(c_custkey)": 3.734375,
+                "partsupp(ps_suppkey)": 19.9296875,
+                "orders(o_orderkey)": 37.3984375,
+                "lineitem(l_partkey)": 149.5390625,
+                "lineitem(l_shipdate)": 149.5390625
+            },
+            "reward": {
+                "lineitem(l_partkey)": 37.20931532939935,
+                "orders(o_orderkey)": 11.766184853494003,
+                "partsupp(ps_suppkey)": 6.742852513476098,
+                "lineitem(l_shipdate)": 2.24879057075581,
+                "customer(c_custkey)": 1.3525030923377195,
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                1832711385.96,
+                250432334.22000003,
+                238075726.41,
+                186488016.67999998,
+                262541555.92000002
+            ],
+            "with indexes": [
+                652886684.58,
+                63638528.6,
+                175778627.67999998,
+                181559099.26,
+                44412840.36
+            ]
+        }
+    }
+}

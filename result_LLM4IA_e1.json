@@ -1,0 +1,158 @@
+{
+    "Init Index Gen": {
+        "storage": 224.3515625,
+        "reward": 36.8049150406661,
+        "experience": [
+            "lineitem(l_orderkey, l_partkey)",
+            "supplier(s_suppkey)",
+            "customer(c_custkey)",
+            "orders(o_orderdate, o_orderkey)",
+            "orders(o_orderdate, o_totalprice)",
+            "orders(o_orderkey, o_orderdate)",
+            "orders(o_orderkey, o_custkey)",
+            "partsupp(ps_partkey)",
+            "orders(o_custkey)",
+            "orders(o_orderpriority)",
+            "part(p_partkey)",
+            "orders(o_totalprice, o_orderdate)",
+            "orders(o_totalprice)",
+            "part(p_size)",
+            "partsupp(ps_suppkey)",
+            "supplier(s_nationkey)",
+            "nation(n_name)",
+            "part(p_container)"
+        ],
+        "indexes": "lineitem(l_orderkey); orders(o_orderdate); orders(o_orderkey)",
+        "LLM Input": "Index recommendations are critical to optimizing the performance of workloads in database. Good Indexes can greatly improve the performance of workloads in database. Please complete the index recommendation task according to the following information and requirements.\nGiven a filter dictionary of a workload. It contains the overhead of different filter predicates in different operations for each query plan corresponding to that workload: {'Nested Loop': {}, 'Merge Join': {}, 'Hash Join': {'t6.c16 = t2.c4': 22, 't2.c4 = t6.c16': 21, 't6.c14 = t1.c1': 21, 't2.c5 = t7.c22': 21, 't7.c22 = t2.c5': 21, 't4.c26 = t5.c13': 19, 't2.c11 = t4.c27': 19, 't2.c11 = t3.c25 AND t2.c5 = t3.c24': 19, 't3.c24 = t7.c22': 17}, 'Seq Scan': {'t2.c10 = ? AND t2.c9 = ? AND t2.c6 >= ?': 21, 't2.c8 >= ? AND t2.c8 < ?': 21, 't2.c3 < ?': 21, 't6.c15 >= ? AND t6.c15 < ?': 19, 't7.c23 >= ? AND t7.c19 = ? AND t7.c20 = ?': 18}, 'Sort': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12': 19}, 'Group': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12, t6.c15': 19}}.\nGiven a database with structure (e.g. table(record number)[columns(single column index's storage cost (unit: MB))]) that: t1(150000)[c1(3.73), c2(6.54)], t2(6002239)[c9(314.01), c7(149.52), c3(149.52), c4(149.52), c6(157.0), c8(149.52), c10(201.86), c5(149.52), c11(149.52)], t5(25)[c13(0.01), c12(0.01)], t6(1501024)[c17(59.8), c18(44.84), c15(37.38), c16(37.38), c14(37.38)], t7(200000)[c20(6.73), c22(4.98), c19(6.73), c21(12.2), c23(4.98)], t3(800000)[c24(19.93), c25(19.93)], t4(10000)[c26(0.24), c27(0.24)].\nGiven a storage budget limit: 500MB.\nTask: Please recommend a best index set for the above database, workload and storage budget.\nChain of Thought: Please think step by step: First, try your bset to recommend a single column index set that will optimize the workload the most within storage budget. Second, for the single-column index set generated in the previous step, try your best to select suitable single-column indexes, and use them as the first column of 2-column indexes to extend them into 2-column indexes to make the final index set better. Final, give the best recommended index set in a line.\nRules: There are rules you should follow for index recommendation: 1.Maximize the storage budget to achieve better index optimization, but ensure that the total storage cost of the selected indexes does not exceed the storage budget. 2.Make sure that the tables and columns you use actually exist in the database structure information given. 3. Ensure that all columns that appear in a 2-column index belong to the same table.\nOutput Format Requirement: The output should be recommended indexes sets of each step. Each recommended indexes set should be in a line, like: '**Final Recommended Index Set**: [index1;index2;...]'. Each index should be like: table(column) or table(columns). Give each step of the thought process and recommended indexes."
+    },
+    "Plan-based Enhancement": {
+        "round 1": {
+            "storage": 373.90625,
+            "reward": 56.1987527650729,
+            "indexes": "lineitem(l_orderkey); lineitem(l_partkey); orders(o_orderdate); orders(o_orderkey)",
+            "experience": [
+                "lineitem(l_orderkey, l_partkey)",
+                "supplier(s_suppkey)",
+                "customer(c_custkey)",
+                "orders(o_orderdate, o_orderkey)",
+                "orders(o_orderdate, o_totalprice)",
+                "orders(o_orderkey, o_orderdate)",
+                "orders(o_orderkey, o_custkey)",
+                "partsupp(ps_partkey)",
+                "orders(o_custkey)",
+                "orders(o_orderpriority)",
+                "part(p_partkey)",
+                "orders(o_totalprice, o_orderdate)",
+                "orders(o_totalprice)",
+                "part(p_size)",
+                "partsupp(ps_suppkey)",
+                "supplier(s_nationkey)",
+                "nation(n_name)",
+                "part(p_container)"
+            ],
+            "indexes_trace": [
+                "lineitem(l_orderkey); orders(o_orderdate); orders(o_orderkey); lineitem(l_partkey)",
+                "lineitem(l_orderkey); orders(o_orderdate); orders(o_orderkey); lineitem(l_partkey); lineitem(l_suppkey)",
+                "lineitem(l_orderkey); orders(o_orderdate); orders(o_orderkey); part(p_size)"
+            ],
+            "flag_trace": [
+                true,
+                true,
+                false
+            ],
+            "LLM Input": "Index recommendations are critical to optimizing the performance of workloads in database. Good Indexes can greatly improve the performance of workloads in database. Please complete the index recommendation task according to the following information and requirements.\nGiven a filter dictionary of a workload. It contains the overhead of different filter predicates in different operations for each query plan corresponding to that workload: {'Nested Loop': {}, 'Merge Join': {}, 'Hash Join': {'t6.c16 = t2.c4': 22, 't2.c4 = t6.c16': 21, 't6.c14 = t1.c1': 21, 't2.c5 = t7.c22': 21, 't7.c22 = t2.c5': 21, 't4.c26 = t5.c13': 19, 't2.c11 = t4.c27': 19, 't2.c11 = t3.c25 AND t2.c5 = t3.c24': 19, 't3.c24 = t7.c22': 17}, 'Seq Scan': {'t2.c10 = ? AND t2.c9 = ? AND t2.c6 >= ?': 21, 't2.c8 >= ? AND t2.c8 < ?': 21, 't2.c3 < ?': 21, 't6.c15 >= ? AND t6.c15 < ?': 19, 't7.c23 >= ? AND t7.c19 = ? AND t7.c20 = ?': 18}, 'Sort': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12': 19}, 'Group': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12, t6.c15': 19}}.\nGiven a database with structure (e.g. table(record number)[columns(single column index's storage cost (unit: MB))]) that: t1(150000)[c1(3.73), c2(6.54)], t2(6002239)[c9(314.01), c7(149.52), c3(149.52), c4(149.52), c6(157.0), c8(149.52), c10(201.86), c5(149.52), c11(149.52)], t5(25)[c13(0.01), c12(0.01)], t6(1501024)[c17(59.8), c18(44.84), c15(37.38), c16(37.38), c14(37.38)], t7(200000)[c20(6.73), c22(4.98), c19(6.73), c21(12.2), c23(4.98)], t3(800000)[c24(19.93), c25(19.93)], t4(10000)[c26(0.24), c27(0.24)].\nGiven a storage budget limit: 500MB.\nRules: There are rules you should follow for index recommendation: 1.Maximize the storage budget to achieve better index optimization, but ensure that the total storage cost of the selected indexes does not exceed the storage budget. 2.Make sure that the tables and columns you use actually exist in the database structure information given. 3. Ensure that all columns that appear in a 2-column index belong to the same table.\nGiven a index set: [t2(c4); t6(c15); t6(c16)]. It's storage consumption is: 224.3515625 MB.\nTask: Please make improvements to the given set of indexes (i.e., let indexes speed up workload faster) within the given storage budget by: adding a new single-column index or extending an column to an single-column index (e.g., t1(c1)->t1(c1, c2)).\nDo not use index in: [t2(c4, c5), t4(c27), t1(c1), t6(c15, c16), t6(c15, c18), t6(c16, c15), t6(c16, c14), t3(c24), t6(c14), t6(c17), t7(c22), t6(c18, c15), t6(c18)]. Because they are bad indexes.\nOutput Format Requirement: The output should be recommended indexes sets of each step. Each recommended indexes set should be in a line, like: '**Final Recommended Index Set**: [index1;index2;...]'. Each index should be like: table(column) or table(columns). Give each step of the thought process and recommended indexes."
+        },
+        "round 2": {},
+        "round num": 1
+    },
+    "Data-based Enhancement": {
+        "round 1": {
+            "storage": 492.7890625,
+            "reward": 60.314009525146744,
+            "indexes": "lineitem(l_orderkey); lineitem(l_partkey); part(p_brand); lineitem(l_shipdate); orders(o_orderdate)",
+            "experience": [
+                "lineitem(l_orderkey, l_partkey)",
+                "supplier(s_suppkey)",
+                "customer(c_custkey)",
+                "orders(o_orderdate, o_orderkey)",
+                "orders(o_orderdate, o_totalprice)",
+                "orders(o_orderkey, o_orderdate)",
+                "orders(o_orderkey, o_custkey)",
+                "partsupp(ps_partkey)",
+                "orders(o_custkey)",
+                "orders(o_orderpriority)",
+                "part(p_partkey)",
+                "orders(o_totalprice, o_orderdate)",
+                "orders(o_totalprice)",
+                "part(p_size)",
+                "partsupp(ps_suppkey)",
+                "supplier(s_nationkey)",
+                "nation(n_name)",
+                "part(p_container)"
+            ],
+            "indexes_trace": [
+                "lineitem(l_orderkey); lineitem(l_partkey); orders(o_orderdate); orders(o_orderkey); orders(o_custkey); part(p_brand); part(p_container)",
+                "lineitem(l_orderkey); lineitem(l_partkey); orders(o_orderdate); orders(o_orderkey); orders(o_custkey)",
+                "lineitem(l_orderkey); lineitem(l_partkey); orders(o_orderdate); orders(o_orderkey); orders(o_custkey); lineitem(l_shipdate)"
+            ],
+            "flag_trace": [
+                true,
+                false,
+                true
+            ],
+            "LLM Input": "Index recommendations are critical to optimizing the performance of workloads in database. Good Indexes can greatly improve the performance of workloads in database. Please complete the index recommendation task according to the following information and requirements.\nGiven a filter dictionary of a workload. It contains the overhead of different filter predicates in different operations for each query plan corresponding to that workload: {'Nested Loop': {}, 'Merge Join': {}, 'Hash Join': {'t6.c16 = t2.c4': 22, 't2.c4 = t6.c16': 21, 't6.c14 = t1.c1': 21, 't2.c5 = t7.c22': 21, 't7.c22 = t2.c5': 21, 't4.c26 = t5.c13': 19, 't2.c11 = t4.c27': 19, 't2.c11 = t3.c25 AND t2.c5 = t3.c24': 19, 't3.c24 = t7.c22': 17}, 'Seq Scan': {'t2.c10 = ? AND t2.c9 = ? AND t2.c6 >= ?': 21, 't2.c8 >= ? AND t2.c8 < ?': 21, 't2.c3 < ?': 21, 't6.c15 >= ? AND t6.c15 < ?': 19, 't7.c23 >= ? AND t7.c19 = ? AND t7.c20 = ?': 18}, 'Sort': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12': 19}, 'Group': {'t6.c18, t6.c15, t1.c2': 21, 't6.c17': 21, 't2.c4': 21, 't5.c12, t6.c15': 19}}.\nGiven a database with structure (e.g. table(record number)[columns(single column index's storage cost (unit: MB))]) that: t1(150000)[c1(3.73), c2(6.54)], t2(6002239)[c9(314.01), c7(149.52), c3(149.52), c4(149.52), c6(157.0), c8(149.52), c10(201.86), c5(149.52), c11(149.52)], t5(25)[c13(0.01), c12(0.01)], t6(1501024)[c17(59.8), c18(44.84), c15(37.38), c16(37.38), c14(37.38)], t7(200000)[c20(6.73), c22(4.98), c19(6.73), c21(12.2), c23(4.98)], t3(800000)[c24(19.93), c25(19.93)], t4(10000)[c26(0.24), c27(0.24)].\nGiven a storage budget limit: 500MB.\nRules: There are rules you should follow for index recommendation: 1.Maximize the storage budget to achieve better index optimization, but ensure that the total storage cost of the selected indexes does not exceed the storage budget. 2.Make sure that the tables and columns you use actually exist in the database structure information given. 3. Ensure that all columns that appear in a 2-column index belong to the same table.\nGiven a index set: [t2(c4); t2(c5); t6(c15); t6(c16)]. It's storage consumption is: 373.90625 MB.\nTask: Please make improvements to the given set of indexes (i.e., let indexes speed up workload faster) within the given storage budget by: adding a new single-column index or extending an column to an single-column index (e.g., t1(c1)->t1(c1, c2)).\nDo not use index in: [t2(c4, c5), t4(c27), t1(c1), t6(c15, c16), t6(c15, c18), t6(c16, c15), t6(c16, c14), t3(c24), t6(c14), t6(c17), t7(c22), t6(c18, c15), t6(c18), t7(c23), t3(c25), t4(c26), t5(c12)]. Because they are bad indexes.\nOutput Format Requirement: The output should be recommended indexes sets of each step. Each recommended indexes set should be in a line, like: '**Final Recommended Index Set**: [index1;index2;...]'. Each index should be like: table(column) or table(columns). Give each step of the thought process and recommended indexes."
+        },
+        "round 2": {},
+        "round num": 1
+    },
+    "Analysis": {
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 500
+        },
+        "Output Index Set": "lineitem(l_orderkey); lineitem(l_partkey); part(p_brand); lineitem(l_shipdate); orders(o_orderdate)",
+        "Cost Reduction": {
+            "no index": 9267301263.68,
+            "with indexes": 3677820296.78,
+            "cost reduction ratio": 60.314009525146744
+        },
+        "Inference Time": 166.4995629787445,
+        "Inference Time Details": [
+            71.70474290847778,
+            84.66642189025879,
+            10.128398180007935
+        ],
+        "Index Analysis": {
+            "storage": {
+                "lineitem(l_orderkey)": 149.5546875,
+                "lineitem(l_partkey)": 149.5546875,
+                "part(p_brand)": 6.7265625,
+                "lineitem(l_shipdate)": 149.5546875,
+                "orders(o_orderdate)": 37.3984375
+            },
+            "reward": {
+                "lineitem(l_orderkey)": 35.38295591653085,
+                "lineitem(l_partkey)": 19.393837905689352,
+                "lineitem(l_shipdate)": 4.476786560570432,
+                "orders(o_orderdate)": 0.7928035900585978,
+                "part(p_brand)": 0.2676234618291727
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                1892726340.8,
+                370031239.2,
+                1557237922.65,
+                3519453608.88,
+                1927852152.15
+            ],
+            "with indexes": [
+                549774167.48,
+                167690577.60000002,
+                1142360625.15,
+                1509889068.74,
+                308105857.81
+            ]
+        }
+    }
+}

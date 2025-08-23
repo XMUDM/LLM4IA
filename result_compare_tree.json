@@ -1,0 +1,112 @@
+{
+    "workload": {
+        "select l_orderkey, sum(l_extendedprice * (1 - l_discount)) as revenue, o_orderdate, o_shippriority from customer, orders, lineitem where c_mktsegment = 'BUILDING' and c_custkey = o_custkey and l_orderkey = o_orderkey and o_orderdate < date '1995-03-15' and l_shipdate > date '1995-03-15' group by l_orderkey, o_orderdate, o_shippriority order by revenue desc, o_orderdate limit 10": 3045,
+        "select supp_nation, cust_nation, l_year, sum(volume) as revenue from ( select n1.n_name as supp_nation, n2.n_name as cust_nation, extract(year from l_shipdate) as l_year, l_extendedprice * (1 - l_discount) as volume from supplier, lineitem, orders, customer, nation n1, nation n2 where s_suppkey = l_suppkey and o_orderkey = l_orderkey and c_custkey = o_custkey and s_nationkey = n1.n_nationkey and c_nationkey = n2.n_nationkey and ( (n1.n_name = 'FRANCE' and n2.n_name = 'GERMANY') or (n1.n_name = 'GERMANY' and n2.n_name = 'FRANCE') ) and l_shipdate between date '1995-01-01' and date '1996-12-31' ) as shipping group by supp_nation, cust_nation, l_year order by supp_nation, cust_nation, l_year": 6211,
+        "select o_year, sum(case when nation = 'BRAZIL' then volume else 0 end) / sum(volume) as mkt_share from ( select extract(year from o_orderdate) as o_year, l_extendedprice * (1 - l_discount) as volume, n2.n_name as nation from part, supplier, lineitem, orders, customer, nation n1, nation n2, region where p_partkey = l_partkey and s_suppkey = l_suppkey and l_orderkey = o_orderkey and o_custkey = c_custkey and c_nationkey = n1.n_nationkey and n1.n_regionkey = r_regionkey and r_name = 'AMERICA' and s_nationkey = n2.n_nationkey and o_orderdate between date '1995-01-01' and date '1996-12-31' and p_type = 'ECONOMY ANODIZED STEEL' ) as all_nations group by o_year order by o_year": 8278,
+        "select c_custkey, c_name, sum(l_extendedprice * (1 - l_discount)) as revenue, c_acctbal, n_name, c_address, c_phone, c_comment from customer, orders, lineitem, nation where c_custkey = o_custkey and l_orderkey = o_orderkey and o_orderdate >= date '1993-10-01' and o_orderdate < date '1993-10-01' + interval '3' month and l_returnflag = 'R' and c_nationkey = n_nationkey group by c_custkey, c_name, c_acctbal, c_phone, n_name, c_address, c_comment order by revenue desc limit 20": 1452,
+        "select ps_partkey, sum(ps_supplycost * ps_availqty) as value from partsupp, supplier, nation where ps_suppkey = s_suppkey and s_nationkey = n_nationkey and n_name = 'GERMANY' group by ps_partkey having sum(ps_supplycost * ps_availqty) > ( select sum(ps_supplycost * ps_availqty) * 0.0001000000 from partsupp, supplier, nation where ps_suppkey = s_suppkey and s_nationkey = n_nationkey and n_name = 'GERMANY' ) order by value desc": 9581
+    },
+    "compare IA": {
+        "name": "Extend",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 250
+        },
+        "Output Index Set": "partsupp(ps_suppkey); orders(o_orderkey); customer(c_custkey); lineitem(l_suppkey); part(p_type)",
+        "Cost Reduction": {
+            "no index": 4405526393.38,
+            "with indexes": 2977198468.9300003,
+            "cost reduction ratio": 32.421277207561126
+        },
+        "Inference Time": 9.921533584594727,
+        "Index Analysis": {
+            "storage": {
+                "partsupp(ps_suppkey)": 19.9296875,
+                "orders(o_orderkey)": 37.3984375,
+                "customer(c_custkey)": 3.734375,
+                "lineitem(l_suppkey)": 149.5625,
+                "part(p_type)": 9.21875
+            },
+            "reward": {
+                "lineitem(l_suppkey)": 13.570459554353477,
+                "orders(o_orderkey)": 10.224553612409766,
+                "partsupp(ps_suppkey)": 8.616815532655373,
+                "customer(c_custkey)": 0.7475597074957653,
+                "part(p_type)": 0.43142298701377935
+            },
+            "ratio": {
+                "partsupp(ps_suppkey)": 0.43236079505287645,
+                "orders(o_orderkey)": 0.2733952083535513,
+                "customer(c_custkey)": 0.2001833526348493,
+                "lineitem(l_suppkey)": 0.09073437228151092,
+                "part(p_type)": 0.04679842570996928
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                770935931.85,
+                1217092405.16,
+                1614401718.48,
+                294243966.71999997,
+                508852371.17
+            ],
+            "with indexes": [
+                770935931.85,
+                507514908.97,
+                1275267372.78,
+                294243966.71999997,
+                129236288.61
+            ]
+        }
+    },
+    "LLM4IA": {
+        "name": "LLM4IA",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 250
+        },
+        "Output Index Set": "partsupp(ps_suppkey); lineitem(l_orderkey); orders(o_custkey); part(p_type)",
+        "Cost Reduction": {
+            "no index": 4405526393.38,
+            "with indexes": 1977987613.6,
+            "cost reduction ratio": 55.10212771458505
+        },
+        "Inference Time": 223.13187074661255,
+        "Index Analysis": {
+            "storage": {
+                "partsupp(ps_suppkey)": 19.9296875,
+                "lineitem(l_orderkey)": 149.5625,
+                "orders(o_custkey)": 37.3984375,
+                "part(p_type)": 9.21875
+            },
+            "reward": {
+                "lineitem(l_orderkey)": 38.27424335770078,
+                "partsupp(ps_suppkey)": 8.616815532655373,
+                "orders(o_custkey)": 7.6892883115859005,
+                "part(p_type)": 0.43142298701377935
+            },
+            "ratio": {
+                "partsupp(ps_suppkey)": 0.43236079505287645,
+                "lineitem(l_orderkey)": 0.2559080207786095,
+                "orders(o_custkey)": 0.20560453392166184,
+                "part(p_type)": 0.04679842570996928
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                770935931.85,
+                1217092405.16,
+                1614401718.48,
+                294243966.71999997,
+                508852371.17
+            ],
+            "with indexes": [
+                530132338.05,
+                333792183.09999996,
+                730183175.04,
+                254643628.79999998,
+                129236288.61
+            ]
+        }
+    }
+}

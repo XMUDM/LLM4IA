@@ -1,0 +1,100 @@
+{
+    "workload": {
+        "select nation, o_year, sum(amount) as sum_profit from ( select n_name as nation, extract(year from o_orderdate) as o_year, l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount from part, supplier, lineitem, partsupp, orders, nation where s_suppkey = l_suppkey and ps_suppkey = l_suppkey and ps_partkey = l_partkey and p_partkey = l_partkey and o_orderkey = l_orderkey and s_nationkey = n_nationkey and p_name like '%green%' ) as profit group by nation, o_year order by nation, o_year desc": 1486,
+        "select c_custkey, c_name, sum(l_extendedprice * (1 - l_discount)) as revenue, c_acctbal, n_name, c_address, c_phone, c_comment from customer, orders, lineitem, nation where c_custkey = o_custkey and l_orderkey = o_orderkey and o_orderdate >= date '1993-10-01' and o_orderdate < date '1993-10-01' + interval '3' month and l_returnflag = 'R' and c_nationkey = n_nationkey group by c_custkey, c_name, c_acctbal, c_phone, n_name, c_address, c_comment order by revenue desc limit 20": 5829,
+        "select 100.00 * sum(case when p_type like 'PROMO%' then l_extendedprice * (1 - l_discount) else 0 end) / sum(l_extendedprice * (1 - l_discount)) as promo_revenue from lineitem, part where l_partkey = p_partkey and l_shipdate >= date '1995-09-01' and l_shipdate < date '1995-09-01' + interval '1' month": 5732,
+        "select sum(l_extendedprice* (1 - l_discount)) as revenue from lineitem, part where ( p_partkey = l_partkey and p_brand = 'Brand#12' and p_container in ('SM CASE', 'SM BOX', 'SM PACK', 'SM PKG') and l_quantity >= 1 and l_quantity <= 1 + 10 and p_size between 1 and 5 and l_shipmode in ('AIR', 'AIR REG') and l_shipinstruct = 'DELIVER IN PERSON' ) or ( p_partkey = l_partkey and p_brand = 'Brand#23' and p_container in ('MED BAG', 'MED BOX', 'MED PKG', 'MED PACK') and l_quantity >= 10 and l_quantity <= 10 + 10 and p_size between 1 and 10 and l_shipmode in ('AIR', 'AIR REG') and l_shipinstruct = 'DELIVER IN PERSON' ) or ( p_partkey = l_partkey and p_brand = 'Brand#34' and p_container in ('LG CASE', 'LG BOX', 'LG PACK', 'LG PKG') and l_quantity >= 20 and l_quantity <= 20 + 10 and p_size between 1 and 15 and l_shipmode in ('AIR', 'AIR REG') and l_shipinstruct = 'DELIVER IN PERSON' )": 3571,
+        "select cntrycode, count(*) as numcust, sum(c_acctbal) as totacctbal from ( select substring(c_phone from 1 for 2) as cntrycode, c_acctbal from customer where substring(c_phone from 1 for 2) in ('13', '31', '23', '29', '30', '18', '17') and c_acctbal > ( select avg(c_acctbal) from customer where c_acctbal > 0.00 and substring(c_phone from 1 for 2) in ('13', '31', '23', '29', '30', '18', '17') ) and not exists ( select * from orders where o_custkey = c_custkey ) ) as custsale group by cntrycode order by cntrycode": 2198
+    },
+    "compare IA": {
+        "name": "Relaxation",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 250
+        },
+        "Output Index Set": "lineitem(l_shipmode)",
+        "Cost Reduction": {
+            "no index": 3243143051.0200005,
+            "with indexes": 3243143051.0200005,
+            "cost reduction ratio": 0.0
+        },
+        "Inference Time": 8.017272472381592,
+        "Index Analysis": {
+            "storage": {
+                "lineitem(l_shipmode)": 201.9140625
+            },
+            "reward": {
+                "lineitem(l_shipmode)": 0.0
+            },
+            "ratio": {
+                "lineitem(l_shipmode)": 0.0
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                327187390.84,
+                1178764686.93,
+                909204681.2,
+                701249018.59,
+                126737273.46
+            ],
+            "with indexes": [
+                327187390.84,
+                1178764686.93,
+                909204681.2,
+                701249018.59,
+                126737273.46
+            ]
+        }
+    },
+    "LLM4IA": {
+        "name": "LLM4IA",
+        "Index Selection Parameter": {
+            "max index length": 2,
+            "storage budget": 250
+        },
+        "Output Index Set": "orders(o_custkey); orders(o_orderkey); part(p_brand); lineitem(l_orderkey)",
+        "Cost Reduction": {
+            "no index": 3243143051.0200005,
+            "with indexes": 2929627796.2099996,
+            "cost reduction ratio": 9.667018996013676
+        },
+        "Inference Time": 124.9703619480133,
+        "Index Analysis": {
+            "storage": {
+                "orders(o_custkey)": 37.3984375,
+                "orders(o_orderkey)": 37.3984375,
+                "part(p_brand)": 6.7265625,
+                "lineitem(l_orderkey)": 149.5625
+            },
+            "reward": {
+                "lineitem(l_orderkey)": 4.950723563658504,
+                "orders(o_custkey)": 2.8479787923924844,
+                "orders(o_orderkey)": 1.5902467781610679,
+                "part(p_brand)": 0.2780698618016181
+            },
+            "ratio": {
+                "orders(o_custkey)": 0.07615234707044871,
+                "orders(o_orderkey)": 0.042521743807106056,
+                "part(p_brand)": 0.04133907353148329,
+                "lineitem(l_orderkey)": 0.0331013694185274
+            }
+        },
+        "Cost Per Query": {
+            "no index": [
+                327187390.84,
+                1178764686.93,
+                909204681.2,
+                701249018.59,
+                126737273.46
+            ],
+            "with indexes": [
+                275613412.96,
+                1018205639.6999999,
+                909204681.2,
+                692230815.19,
+                34373247.160000004
+            ]
+        }
+    }
+}
