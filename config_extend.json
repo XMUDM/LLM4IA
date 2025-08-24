@@ -4,10 +4,10 @@
     "scale_factor": 1,
     "psql_connect": {
         "benchmark_name": "tpch1gb_xl_v4",
-        "pg_ip": "59.77.5.98",
-        "pg_port": "5432",
-        "pg_user": "xianlv",
-        "pg_password": "xianlv404"
+        "pg_ip": "",
+        "pg_port": "",
+        "pg_user": "",
+        "pg_password": ""
     },
     "algorithms": [
         {
@@ -37,4 +37,5 @@
         22
     ],
     "pickle_workload": "True"
+
 }
