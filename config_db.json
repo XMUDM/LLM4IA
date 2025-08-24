@@ -1,7 +1,8 @@
 {
-  "host": "59.77.5.98",
-  "port": "5432",
-  "username": "xianlv",
-  "password": "xianlv404",
-  "db_name": "tpch1gb_xl_v4"
+  "host": "",
+  "port": "",
+  "username": "",
+  "password": "",
+  "db_name": ""
+
 }
